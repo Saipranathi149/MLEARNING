@@ -24,3 +24,46 @@ print(hypothesis)
 
 
 
+import numpy as np
+
+# EnjoySport dataset attributes
+attributes = [
+    ['Sunny', 'Rainy'],  # Outlook
+    ['Warm', 'Cold'],    # Temperature
+    ['Normal', 'High'],  # Humidity
+    ['Strong', 'Weak'],  # Wind
+]
+
+# EnjoySport dataset examples
+examples = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'No'],
+    ['Sunny', 'Warm', 'High', 'Weak', 'Yes'],
+]
+
+def find_s(examples):
+    """
+    Implementation of the Find-S algorithm.
+    
+    Args:
+    - examples: List of examples in the EnjoySport dataset.
+    
+    Returns:
+    - The most specific hypothesis representing the positive examples.
+    """
+    hypothesis = ['0'] * (len(attributes) - 1)  # Initialize hypothesis to the most specific form
+    
+    for example in examples:
+        if example[-1] == 'Yes':  # If the example is positive
+            for i in range(len(attributes) - 1):
+                if hypothesis[i] == '0':  # If the attribute is not yet generalized
+                    hypothesis[i] = example[i]
+                elif hypothesis[i] != example[i]:  # If the attribute conflicts, generalize to '?'
+                    hypothesis[i] = '?'
+    return hypothesis
+
+# Main code
+if __name__ == "__main__":
+    hypothesis = find_s(examples)
+    print("Find-S hypothesis:", hypothesis)
