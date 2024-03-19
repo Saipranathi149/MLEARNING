@@ -1,0 +1,80 @@
+import numpy as np
+import pandas as pd
+data = pd.DataFrame(data=pd.read_csv('enjoysport.csv'))
+concepts = np.array(data.iloc[:,0:-1])
+print(concepts)
+target = np.array(data.iloc[:,-1])
+print(target)
+def learn(concepts, target):
+    specific_h = concepts[0].copy()
+    print("initialization of specific_h and general_h")
+    print(specific_h)
+    general_h = [["?" for i in range(len(specific_h))] for i in
+range(len(specific_h))]
+    print(general_h)
+    for i, h in enumerate(concepts):
+        if target[i] == "yes":
+            for x in range(len(specific_h)):
+                if h[x]!= specific_h[x]:
+                    specific_h[x] ='?'
+                    general_h[x][x] ='?'
+
+                print(specific_h)
+        print(specific_h)
+        if target[i] == "no":
+            for x in range(len(specific_h)):
+                if h[x]!= specific_h[x]:
+                    general_h[x][x] = specific_h[x]
+                else:
+                    general_h[x][x] = '?'
+        print(" steps of Candidate Elimination Algorithm",i+1)
+        print(specific_h)
+        print(general_h)
+    indices = [i for i, val in enumerate(general_h) if val ==['?', '?', '?', '?', '?', '?']]
+    for i in indices:
+        general_h.remove(['?', '?', '?', '?', '?', '?'])
+    return specific_h, general_h
+s_final, g_final = learn(concepts, target)
+print("Final Specific_h:", s_final, sep="\n")
+print("Final General_h:", g_final, sep="\n")
+
+
+
+
+
+import random
+
+# Define the attributes and their possible values
+attributes = {
+    'Outlook': ['Sunny', 'Overcast', 'Rainy'],
+    'Temperature': ['Hot', 'Mild', 'Cool'],
+    'Humidity': ['High', 'Normal'],
+    'Wind': ['Weak', 'Strong'],
+}
+
+# Generate random examples for the EnjoySport dataset
+def generate_example():
+    example = {}
+    for attribute, values in attributes.items():
+        example[attribute] = random.choice(values)
+    example['EnjoySport'] = 'Yes' if random.random() < 0.5 else 'No'  # Assign 'Yes' with 50% probability
+    return example
+
+# Generate EnjoySport dataset
+def generate_dataset(num_examples):
+    dataset = []
+    for _ in range(num_examples):
+        dataset.append(generate_example())
+    return dataset
+
+# Print the dataset
+def print_dataset(dataset):
+    for example in dataset:
+        print(example)
+
+# Main code
+if __name__ == "__main__":
+    num_examples = 10  # Number of examples in the dataset
+    dataset = generate_dataset(num_examples)
+    print("EnjoySport dataset:")
+    print_dataset(dataset)
